@@ -1,0 +1,52 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: projectcontour
+
+commonLabels:
+  app.kubernetes.io/name: contour
+
+resources:
+- namespaces.yaml
+- accounts.yaml
+- crds.yaml
+- rbac.yaml
+- certgen.yaml
+- contour.yaml
+- envoy.yaml
+
+configMapGenerator:
+- name: contour
+  files:
+  - configs/contour.yaml
+
+vars:
+- name: CONTOUR_XDS_PORT
+  objref:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: contour
+  fieldref:
+    fieldpath: spec.template.spec.containers[0].ports[0].containerPort
+- name: ENVOY_HTTP_PORT
+  objref:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: envoy
+  fieldref:
+    fieldpath: spec.template.spec.containers[0].ports[0].containerPort
+- name: ENVOY_HTTPS_PORT
+  objref:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: envoy
+  fieldref:
+    fieldpath: spec.template.spec.containers[0].ports[1].containerPort
+
+images:
+- name: projectcontour/contour
+  newName: docker.io/projectcontour/contour:v1.1.0
+  newTag: master
+- name: envoyproxy/envoy
+  newName: docker.io/envoyproxy/envoy
+  newTag: v1.12.2
