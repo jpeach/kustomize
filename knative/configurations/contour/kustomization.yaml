@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+- ../../base
+
+resources:
+- ./contour-internal
+- namespaces.yaml
+- net-contour-clusterrole.yaml
+- net-contour-controller.yaml
+
+images:
+- name: github.com/mattmoor/net-contour/cmd/controller
+  newName: github.com/mattmoor/net-contour/cmd/controller
+
