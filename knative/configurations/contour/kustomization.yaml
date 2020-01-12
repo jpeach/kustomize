@@ -12,5 +12,6 @@ resources:
 
 images:
 - name: github.com/mattmoor/net-contour/cmd/controller
-  newName: github.com/mattmoor/net-contour/cmd/controller
+  newName: docker.io/jpeach/net-contour
+  newTag: "1"
 
