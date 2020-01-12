@@ -21,6 +21,8 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8000"
+      labels:
+        app.kubernetes.io/component: contour
     spec:
       affinity:
         podAntiAffinity:
