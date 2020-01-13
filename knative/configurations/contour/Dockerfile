@@ -17,5 +17,5 @@ RUN go build \
 	     ./cmd/controller
 
 FROM gcr.io/distroless/base
-COPY --from=build-env /go/src/github.com/mattmoor/net-contour /net-contour
+COPY --from=build-env /go/src/github.com/mattmoor/net-contour/net-contour /net-contour
 CMD ["/net-contour"]
