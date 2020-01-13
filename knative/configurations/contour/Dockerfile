@@ -12,7 +12,6 @@ RUN git clone --depth=1 https://github.com/mattmoor/net-contour $GOPATH/src/gith
 RUN go build \
 	     -o net-contour \
 	     -ldflags '-extldflags "-static"' \
-	     -buildmode pie \
 	     -tags 'osusergo netgo static_build' \
 	     ./cmd/controller
 

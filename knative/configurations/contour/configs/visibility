@@ -6,7 +6,7 @@
 #  2. the namespace/name of the Contour Envoy service.
 ExternalIP:
   class: contour
-  service: contour-external/envoy
+  service: projectcontour-external/envoy-external
 ClusterLocal:
   class: contour-internal
-  service: contour-internal/envoy
+  service: projectcontour-internal/envoy-internal

@@ -1,0 +1,9 @@
+# Note that we don't include the "-internal" suffix here, even though
+# it is present in the kustomization. kustomize will do that update
+# for us.
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: projectcontour

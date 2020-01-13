@@ -1,0 +1,14 @@
+# The net-contour controller needs a configmap with a well-known name.
+# Since kustomize byt default will generate a unique name for configmaps,
+# we declare the configmap here, but use the generator to populate
+# its values. If we use the "replace" behavior, then kustomize preserves
+# the static name.
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-contour
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: devel

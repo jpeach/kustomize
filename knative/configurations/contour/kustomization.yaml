@@ -5,8 +5,6 @@ bases:
 - ../../base
 
 resources:
-- ./contour-internal
-- namespaces.yaml
 - net-contour-clusterrole.yaml
 - net-contour-controller.yaml
 - net-contour-config.yaml
@@ -21,5 +19,4 @@ configMapGenerator:
 images:
 - name: github.com/mattmoor/net-contour/cmd/controller
   newName: docker.io/jpeach/net-contour
-  newTag: "1"
-
+  newTag: "3"
