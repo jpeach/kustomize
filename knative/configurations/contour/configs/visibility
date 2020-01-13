@@ -1,0 +1,12 @@
+# visibility contains the configuration for how to expose services
+# of assorted visibilities.  Each entry is keyed by the visibility
+# and contains two keys:
+#
+#  1. the "class" value to pass to the Contour class annotations,
+#  2. the namespace/name of the Contour Envoy service.
+ExternalIP:
+  class: contour
+  service: contour-external/envoy
+ClusterLocal:
+  class: contour-internal
+  service: contour-internal/envoy
