@@ -1,15 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: projectcontour
-
 commonLabels:
   app.kubernetes.io/name: contour
 
 resources:
-- namespaces.yaml
 - accounts.yaml
-- crds.yaml
 - rbac.yaml
 - certgen.yaml
 - contour.yaml
@@ -21,6 +17,9 @@ configMapGenerator:
   - configs/contour.yaml
 
 vars:
+
+# CONTOUR_XDS_PORT: The Contour service port that the Envoy xDS client
+# should connect to.
 - name: CONTOUR_XDS_PORT
   objref:
     apiVersion: apps/v1
@@ -28,6 +27,20 @@ vars:
     name: contour
   fieldref:
     fieldpath: spec.template.spec.containers[0].ports[0].containerPort
+
+# CONTOUR_XDS_ADDRESS: The contour service name that the Envoy xDR
+# client should connect to. This variable is necessary to rewrite
+# the "contour bootstrap" arguments if the kustomization uses the
+# "nameSuffix" or "namePrefix" options.
+- name: CONTOUR_XDS_ADDRESS
+  objref:
+    apiVersion: v1
+    kind: Service
+    name: contour
+  fieldref:
+    fieldpath: metadata.name
+
+# ENVOY_HTTP_PORT: The port that the Envoy listens on the HTTP requests.
 - name: ENVOY_HTTP_PORT
   objref:
     apiVersion: apps/v1
@@ -35,6 +48,9 @@ vars:
     name: envoy
   fieldref:
     fieldpath: spec.template.spec.containers[0].ports[0].containerPort
+
+# ENVOY_HTTPS_PORT: The port that the Envoy listens on the HTTPS
+# (really TLS in general) requests.
 - name: ENVOY_HTTPS_PORT
   objref:
     apiVersion: apps/v1

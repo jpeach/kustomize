@@ -82,7 +82,7 @@ spec:
       - args:
         - bootstrap
         - /config/envoy.json
-        - --xds-address=contour
+        - --xds-address=$(CONTOUR_XDS_ADDRESS)
         - --xds-port=$(CONTOUR_XDS_PORT)
         - --envoy-cafile=/ca/cacert.pem
         - --envoy-cert-file=/certs/tls.crt
