@@ -45,8 +45,8 @@ vars:
 
 images:
 - name: projectcontour/contour
-  newName: docker.io/projectcontour/contour:v1.1.0
-  newTag: master
+  newName: docker.io/projectcontour/contour
+  newTag: v1.1.0
 - name: envoyproxy/envoy
   newName: docker.io/envoyproxy/envoy
   newTag: v1.12.2
