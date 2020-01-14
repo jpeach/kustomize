@@ -3,15 +3,29 @@
 set -o errexit
 set -o pipefail
 
+readonly PROGNAME=$(basename $0)
+
 GCLOUD=${GCLOUD:-gcloud}
 
-GKE_PROJECT=${GKE_PROJECT:-$(gcloud config get-value core/project)}
-GKE_ZONE=${GKE_ZONE:-$(gcloud config get-value compute/zone)}
-GKE_REGION=${GKE_REGION:-$(gcloud config get-value compute/region)}
+usage() {
+    echo usage: $PROGNAME [CLUSTERNAME]
+    exit 64 # EX_USAGE
+}
 
-GKE_CLUSTER=${GKE_CLUSTER:="knative-dev-1"}
-GKE_MACHINE_TYPE=${GKE_MACHINE_TYPE:-"n1-standard-2"}
-GKE_NUM_NODES=${GKE_NUM_NODES:-"4"}
+case $# in
+0) ;;
+1) GKE_CLUSTER="$1";;
+*) usage;;
+esac
+
+
+readonly GKE_PROJECT=${GKE_PROJECT:-$(gcloud config get-value core/project)}
+readonly GKE_ZONE=${GKE_ZONE:-$(gcloud config get-value compute/zone)}
+readonly GKE_REGION=${GKE_REGION:-$(gcloud config get-value compute/region)}
+
+readonly GKE_CLUSTER=${GKE_CLUSTER:="knative-dev-1"}
+readonly GKE_MACHINE_TYPE=${GKE_MACHINE_TYPE:-"n1-standard-2"}
+readonly GKE_NUM_NODES=${GKE_NUM_NODES:-"4"}
 
 $GCLOUD \
     beta container clusters create ${GKE_CLUSTER} \
