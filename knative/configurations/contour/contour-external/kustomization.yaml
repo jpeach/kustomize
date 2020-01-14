@@ -11,3 +11,8 @@ bases:
 resources:
 - namespaces.yaml
 
+configMapGenerator:
+- name: contour
+  behavior: replace
+  files:
+  - configs/contour.yaml
