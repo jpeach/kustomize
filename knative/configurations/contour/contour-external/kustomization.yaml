@@ -5,7 +5,6 @@ namespace: projectcontour-external
 nameSuffix: -external
 
 bases:
-- ../../../../contour/types
 - ../../../../contour/base
 
 resources:

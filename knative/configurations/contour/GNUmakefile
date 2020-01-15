@@ -11,7 +11,7 @@ Kapp := kapp
 Kubectl := kubectl
 
 Targets := \
-	knative.yaml \
+	knative-contour.yaml \
 	contour-internal.yaml \
 	contour-external.yaml
 
@@ -32,7 +32,7 @@ $(BUILDDIR)/contour-external.yaml:
 	@$(MKDIR_P) $$(dirname $@)
 	$(Kustomize) build -o $@ contour-external
 
-$(BUILDDIR)/knative.yaml:
+$(BUILDDIR)/knative-contour.yaml:
 	@$(MKDIR_P) $$(dirname $@)
 	$(Kustomize) build -o $@ .
 
@@ -42,16 +42,16 @@ $(BUILDDIR)/knative.yaml:
 #
 # Note that kapp will puke some ownership errors because we push
 # the Contour twice.
-.PHONY: deploy.kapp
-deploy.kapp: $(YamlTargets)
+.PHONY: apply.kapp
+apply.kapp: $(YamlTargets)
 	@for y in $^ ; do $(Kapp) deploy --dangerous-ignore-failing-api-services --yes --app $$(basename $$y .yaml) --file $$y ; done
 
 .PHONY: delete.kapp
 delete.kapp: $(YamlTargets)
 	@for y in $^ ; do $(Kapp) delete --yes --app $$(basename $$y .yaml) ; done
 
-.PHONY: deploy.kubectl
-deploy.kubectl: $(YamlTargets)
+.PHONY: apply.kubectl
+apply.kubectl: $(YamlTargets)
 	@for y in $^ ; do $(Kubectl) apply --filename $$y ; done
 
 .PHONY: delete.kubectl
