@@ -5,7 +5,7 @@
 #  1. the "class" value to pass to the Contour class annotations,
 #  2. the namespace/name of the Contour Envoy service.
 ExternalIP:
-  class: contour
+  class: contour-external
   service: projectcontour-external/envoy-external
 ClusterLocal:
   class: contour-internal
