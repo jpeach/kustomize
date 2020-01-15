@@ -1,10 +1,10 @@
 RM := rm -rf
 MKDIR_P := mkdir -p
 
-# BUILDDIR: Override to change the YAML output directory. This is
+# DESTDIR: Override to change the YAML output directory. This is
 # useful if tou make a change and want to diff it to a previous
 # version.
-BUILDDIR := out
+DESTDIR := out
 
 Kustomize := kustomize
 Kapp := kapp
@@ -15,7 +15,7 @@ Targets := \
 	contour-internal.yaml \
 	contour-external.yaml
 
-YamlTargets := $(patsubst %,$(BUILDDIR)/%,$(Targets))
+YamlTargets := $(patsubst %,$(DESTDIR)/%,$(Targets))
 
 .PHONY: yaml
 yaml: $(YamlTargets)
@@ -24,15 +24,15 @@ yaml: $(YamlTargets)
 image:
 	docker build --tag docker.io/jpeach/net-contour:3 .
 
-$(BUILDDIR)/contour-internal.yaml:
+$(DESTDIR)/contour-internal.yaml:
 	@$(MKDIR_P) $$(dirname $@)
 	$(Kustomize) build -o $@ contour-internal
 
-$(BUILDDIR)/contour-external.yaml:
+$(DESTDIR)/contour-external.yaml:
 	@$(MKDIR_P) $$(dirname $@)
 	$(Kustomize) build -o $@ contour-external
 
-$(BUILDDIR)/knative-contour.yaml:
+$(DESTDIR)/knative-contour.yaml:
 	@$(MKDIR_P) $$(dirname $@)
 	$(Kustomize) build -o $@ .
 
@@ -59,4 +59,4 @@ delete.kubectl: $(YamlTargets)
 	@for y in $^ ; do $(Kubectl) delete --filename $$y ; done
 
 clean:
-	$(RM) $(BUILDDIR)
+	$(RM) $(DESTDIR)
