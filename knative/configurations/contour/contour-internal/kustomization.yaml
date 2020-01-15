@@ -11,6 +11,9 @@ bases:
 resources:
 - namespaces.yaml
 
+patchesStrategicMerge:
+- envoy-node-selector.yaml
+
 configMapGenerator:
 - name: contour
   behavior: replace
