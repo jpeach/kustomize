@@ -16,6 +16,11 @@ configMapGenerator:
   behavior: replace
   files:
   - configs/visibility
+- name: config-network
+  namespace: knative-serving
+  behavior: merge
+  literals:
+  - ingress.class=contour.ingress.networking.knative.dev
 
 images:
 - name: github.com/mattmoor/net-contour/cmd/controller
