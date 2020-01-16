@@ -21,7 +21,7 @@ tls:
 # The following config shows the defaults for the leader election.
 leaderelection:
   configmap-name: leader-elect
-  configmap-namespace: contour-external
+  configmap-namespace: projectcontour-external
 
 # Logging options
 accesslog-format: envoy
