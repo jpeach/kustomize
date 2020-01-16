@@ -1,0 +1,20 @@
+#! /usr/bin/env bash
+
+set -o pipefail
+
+readonly PROGNAME=$(basename $0)
+readonly EX_USAGE=64
+
+# Find the top of the current git repository.
+readonly REPO=$(git rev-parse --show-toplevel)
+
+if [ ! -d ${REPO}/test/conformance/ingress ] ; then
+    echo ${PROGNAME}: this script must be run inside the knative serving repository
+    exit ${EX_USAGE}
+fi
+
+exec go test \
+    -tags e2e  \
+    "$@" \
+    -args \
+    --ingressClass=contour.ingress.networking.knative.dev
