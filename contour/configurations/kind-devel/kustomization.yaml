@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: projectcontour
+
+bases:
+- ../../types
+- ../../base
+
+resources:
+- namespaces.yaml
+
+patches:
+
+# Make the Envoy a NodePort service.
+- enable-nodeport.yaml
+
+# Enable Envoy debug logging.
+- enable-envoy-debug.yaml
+
+# Disable TLS for the xDS session between Contour and Envoy. Patch the
+# boostrap init container to remove certificate arguments and remove the
+# certificate and CA secrets volumes.
+- disable-xds-certificates.yaml
+
+# Scale the Contour deployment to 0, because the developer will manually
+# run a development Contour build.
+- scale-contour-down.yaml
+
