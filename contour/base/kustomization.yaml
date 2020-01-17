@@ -7,7 +7,6 @@ commonLabels:
 resources:
 - accounts.yaml
 - rbac.yaml
-- certgen.yaml
 - contour.yaml
 - envoy.yaml
 

@@ -6,6 +6,7 @@ namespace: projectcontour
 bases:
 - ../../types
 - ../../base
+- ../../certgen
 
 resources:
 - namespaces.yaml

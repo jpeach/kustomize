@@ -6,6 +6,7 @@ nameSuffix: -internal
 
 bases:
 - ../../../../contour/base
+- ../../../../contour/certgen
 
 resources:
 - namespaces.yaml
@@ -27,3 +28,8 @@ configMapGenerator:
   behavior: replace
   files:
   - configs/contour.yaml
+
+images:
+- name: docker.io/projectcontour/contour:v1.1.0
+  newName: docker.io/jpeach/contour
+  newTag: ads-1
