@@ -20,3 +20,9 @@ Next, run a local Contour build:
 ```
 $ contour serve --insecure --xds-address=0.0.0.0 --envoy-service-http-port=80 --envoy-service-https-port=443
 ```
+
+Unlike a typical Contour deployment, where a `contour bootstrap` init
+container generates the Envoy bootstrap configuration, this is generated
+locally and passed to the Envoy DaemonSet in a ConfigMap. This allows
+us to inject the local host IP address as the xDS server address so that
+Envoy will automatically connect to a locally running Contour.

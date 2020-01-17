@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: envoy
+spec:
+  template:
+    spec:
+      containers:
+      - name: envoy
+        volumeMounts:
+        - mountPath: /ca
+          $patch: delete
+        - mountPath: /certs
+          $patch: delete
+      volumes:
+      - $patch: replace
+      - name: envoy-config
+        configMap:
+          name: envoy-bootstrap
+      initContainers:
+      - name: envoy-initconfig
+        $patch: delete

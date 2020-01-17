@@ -18,12 +18,16 @@ patches:
 # Enable Envoy debug logging.
 - enable-envoy-debug.yaml
 
-# Disable TLS for the xDS session between Contour and Envoy. Patch the
-# boostrap init container to remove certificate arguments and remove the
-# certificate and CA secrets volumes.
-- disable-xds-certificates.yaml
+# Disable TLS for the xDS session between Contour and Envoy. Remove
+# the boostrap init container and provide the Envoy bootstrap through a
+# ConfigMap volume. Remove Contour xDS certificate and CA secrets volumes.
+- update-envoy-daemonset.yaml
 
 # Scale the Contour deployment to 0, because the developer will manually
 # run a development Contour build.
 - scale-contour-down.yaml
 
+configMapGenerator:
+- name: envoy-bootstrap
+  files:
+  - configs/envoy.json
