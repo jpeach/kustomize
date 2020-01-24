@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: envoy
+spec:
+  template:
+    spec:
+      containers:
+      - name: envoy
+        args:
+        - -c
+        - /config/envoy.json
+        - --service-cluster $(CONTOUR_NAMESPACE)
+        - --service-node $(ENVOY_POD_NAME)
+        - --log-level debug

@@ -13,6 +13,7 @@ resources:
 
 patchesStrategicMerge:
 - envoy-node-selector.yaml
+# - envoy-debug-logging.yaml
 
 patchesJson6902:
 - target:
@@ -28,3 +29,8 @@ configMapGenerator:
   behavior: replace
   files:
   - configs/contour.yaml
+
+#images:
+#- name: docker.io/projectcontour/contour:v1.1.0
+#  newName: docker.io/jpeach/contour
+#  newTag: verify-2
