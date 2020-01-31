@@ -53,6 +53,11 @@ kind::cluster::create() {
         --name ${CLUSTER}
 }
 
+if kind::cluster::list | grep -q "^$CLUSTER$" ; then
+	echo Cluster \"$CLUSTER\" already exists
+	exit 0
+fi
+
 kind::cluster::create
 
 cat <<EOF
