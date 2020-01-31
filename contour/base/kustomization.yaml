@@ -64,4 +64,4 @@ images:
   newTag: v1.1.0
 - name: envoyproxy/envoy
   newName: docker.io/envoyproxy/envoy
-  newTag: v1.12.2
+  newTag: v1.13.0
