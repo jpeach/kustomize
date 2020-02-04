@@ -26,3 +26,11 @@ container generates the Envoy bootstrap configuration, this is generated
 locally and passed to the Envoy DaemonSet in a ConfigMap. This allows
 us to inject the local host IP address as the xDS server address so that
 Envoy will automatically connect to a locally running Contour.
+
+You will likely see the following error when generating the YAML:
+```
+2020/01/31 14:26:22 well-defined vars that were never replaced: CONTOUR_XDS_ADDRESS
+```
+
+This can be ignored, since in this deployment, we will never install
+Contour into the cluster.

@@ -25,7 +25,7 @@ Targets := configs/envoy.json $(DESTDIR)/contour.yaml
 
 yaml: $(Targets)
 
-configs/envoy.json: configs
+configs/envoy.json:
 	@$(MKDIR_P) $$(dirname $@)
 	@$(Contour) bootstrap \
 		--xds-address=$(xDS_Address) \
@@ -56,3 +56,13 @@ delete.kubectl: $(Targets)
 clean:
 	@$(RM_F) $(DESTDIR)
 	@$(RM_F) configs/envoy.json
+
+.PHONY: kind
+kind: $(DESTDIR)/contour.yaml
+	@echo 1/2 Creating Kind cluster ...
+	@../../../hack/kind-make-cluster.sh
+	@echo 2/2 Loading container images ...
+	@for img in $$(awk '/image:/{print $$2}' $(DESTDIR)/*.yaml) ; do \
+		docker pull $$img ; \
+		kind load docker-image --name contour $$img ; \
+	done
