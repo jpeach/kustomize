@@ -22,7 +22,7 @@ metadata:
   name: httpbin-2-cert
 spec:
   dnsNames:
-    - httpbin-2.jpeach.org
+  - httpbin-2.jpeach.org
   secretName: httpbin-2
   issuerRef:
     name: test-selfsigned
