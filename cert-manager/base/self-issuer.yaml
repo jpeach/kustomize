@@ -1,0 +1,9 @@
+# Create a self-signing issuer in the default namespace.
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: test-selfsigned
+spec:
+  selfSigned: {}
+

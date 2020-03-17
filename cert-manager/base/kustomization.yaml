@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - namespaces.yaml
 - cert-manager.yaml
+- self-issuer.yaml
