@@ -23,7 +23,8 @@ spec:
         app.kubernetes.io/component: envoy
     spec:
       containers:
-      - args:
+      - name: envoy
+        args:
         - -c
         - /config/envoy.json
         - --service-cluster $(CONTOUR_NAMESPACE)
@@ -33,7 +34,6 @@ spec:
         - envoy
         image: envoyproxy/envoy
         imagePullPolicy: IfNotPresent
-        name: envoy
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
@@ -69,17 +69,33 @@ spec:
             mountPath: /ca
         lifecycle:
           preStop:
-            exec:
-              command:
-              - bash
-              - -c
-              - --
-              - echo
-              - -ne
-              - "POST /healthcheck/fail HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n"
-              - '>/dev/tcp/localhost/9001'
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
+      - name: shutdown-manager
+        command:
+        - /bin/contour
+        args:
+          - envoy
+          - shutdown-manager
+        image: projectcontour/contour
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            httpGet:
+              path: /shutdown
+              port: 8090
+              scheme: HTTP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+          initialDelaySeconds: 3
+          periodSeconds: 10
       initContainers:
-      - args:
+      - name: envoy-initconfig
+        args:
         - bootstrap
         - /config/envoy.json
         - --xds-address=$(CONTOUR_XDS_ADDRESS)
@@ -91,7 +107,6 @@ spec:
         - contour
         image: projectcontour/contour
         imagePullPolicy: Always
-        name: envoy-initconfig
         volumeMounts:
         - name: envoy-config
           mountPath: /config
