@@ -1,0 +1,28 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: httpbin
+spec:
+  virtualhost:
+    fqdn: httpbin.jpeach.org
+    tls:
+      secretName: httpbin
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: httpbin
+          port: 80
+
+---
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: httpbin-cert
+spec:
+  dnsNames:
+  - httpbin.jpeach.org
+  secretName: httpbin
+  issuerRef:
+    name: test-selfsigned
