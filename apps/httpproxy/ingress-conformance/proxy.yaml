@@ -1,0 +1,14 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: conformance
+spec:
+  virtualhost:
+    fqdn: conformance.jpeach.org
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: ingress-conformance-echo
+          port: 80
+
