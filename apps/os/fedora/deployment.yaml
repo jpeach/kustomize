@@ -21,8 +21,11 @@ spec:
         app: fedora
     spec:
       containers:
-      - image: docker.io/fedora:32
-        imagePullPolicy: IfNotPresent
-        name: fedora
+      - name: fedora
+        image: docker.io/fedora:32
+        command:
+        - /bin/sleep
+        args:
+        - infinity
       dnsPolicy: ClusterFirst
       restartPolicy: Always
