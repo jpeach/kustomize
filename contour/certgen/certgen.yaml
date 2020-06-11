@@ -1,4 +1,3 @@
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -6,20 +5,28 @@ metadata:
   labels:
       app.kubernetes.io/component: certgen
 spec:
+  ttlSecondsAfterFinished: 0
   template:
     metadata:
       labels:
-        app: "contour-certgen"
+        app.kubernetes.io/component: certgen
     spec:
       containers:
       - name: contour
+        # This version is set to latest because Job specs are immutable;
+        # if we change this on each version, you can no longer upgrade
+        # just by applying the deployment YAML.
+        # See #2423, #2395, #2150, and #2030 for earlier questions about this.
         image: docker.io/projectcontour/contour:latest
         imagePullPolicy: Always
         command:
         - contour
         - certgen
-        - --incluster
         - --kube
+        - --incluster
+        - --overwrite
+        - --secrets-format=compact
+        - --namespace=$(CONTOUR_NAMESPACE)
         env:
         - name: CONTOUR_NAMESPACE
           valueFrom:
@@ -34,4 +41,3 @@ spec:
   parallelism: 1
   completions: 1
   backoffLimit: 1
-

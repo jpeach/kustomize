@@ -46,7 +46,7 @@ vars:
     kind: DaemonSet
     name: envoy
   fieldref:
-    fieldpath: spec.template.spec.containers[0].ports[0].containerPort
+    fieldpath: spec.template.spec.containers[1].ports[0].containerPort
 
 # ENVOY_HTTPS_PORT: The port that the Envoy listens on the HTTPS
 # (really TLS in general) requests.
@@ -56,7 +56,7 @@ vars:
     kind: DaemonSet
     name: envoy
   fieldref:
-    fieldpath: spec.template.spec.containers[0].ports[1].containerPort
+    fieldpath: spec.template.spec.containers[1].ports[1].containerPort
 
 images:
 - name: projectcontour/contour

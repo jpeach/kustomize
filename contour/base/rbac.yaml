@@ -1,17 +1,3 @@
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: RoleBinding
-metadata:
-  name: contour
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: contour-certgen
-subjects:
-- kind: ServiceAccount
-  name: contour-certgen
-
----
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -25,6 +11,7 @@ subjects:
   name: contour
 
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -56,7 +43,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - extensions
+  - "networking.k8s.io"
   resources:
   - ingresses
   verbs:
@@ -66,11 +53,14 @@ rules:
 - apiGroups:
   - "networking.k8s.io"
   resources:
-  - ingresses
+  - "ingresses/status"
   verbs:
   - get
   - list
   - watch
+  - patch
+  - post
+  - update
 - apiGroups: ["contour.heptio.com"]
   resources: ["ingressroutes", "tlscertificatedelegations"]
   verbs:
@@ -89,21 +79,24 @@ rules:
   - put
   - post
   - patch
+- apiGroups:
+  - "projectcontour.io"
+  resources:
+  - "httpproxies/status"
+  verbs:
+  - update
+- apiGroups: ["networking.x.k8s.io"]
+  resources: ["gatewayclasses", "gateways", "httproutes", "tcproutes"]
+  verbs:
+  - get
+  - list
+  - watch
+  - put
+  - post
+  - patch
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: RoleBinding
-metadata:
-  name: contour-leaderelection
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: contour-leaderelection
-subjects:
-- kind: ServiceAccount
-  name: contour
 
----
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
@@ -127,3 +120,17 @@ rules:
   - create
   - update
   - patch
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: contour-leaderelection
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: contour-leaderelection
+subjects:
+- kind: ServiceAccount
+  name: contour

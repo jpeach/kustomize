@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,15 +6,15 @@ metadata:
   name: contour
 spec:
   replicas: 2
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: contour
   strategy:
     type: RollingUpdate
     rollingUpdate:
       # This value of maxSurge means that during a rolling update
       # the new ReplicaSet will be created first.
       maxSurge: 50%
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: contour
   template:
     metadata:
       annotations:
@@ -30,7 +29,7 @@ spec:
           - podAffinityTerm:
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/component: contour
+                  app: contour
               topologyKey: kubernetes.io/hostname
             weight: 100
       containers:
@@ -41,13 +40,13 @@ spec:
         - --xds-port=$(CONTOUR_XDS_PORT)
         - --envoy-service-http-port=$(ENVOY_HTTP_PORT)
         - --envoy-service-https-port=$(ENVOY_HTTPS_PORT)
-        - --contour-cafile=/ca/cacert.pem
+        - --contour-cafile=/certs/ca.crt
         - --contour-cert-file=/certs/tls.crt
         - --contour-key-file=/certs/tls.key
         - --config-path=/config/contour.yaml
         command: ["contour"]
         image: projectcontour/contour
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: contour
         ports:
         - containerPort: 8001
@@ -69,13 +68,15 @@ spec:
           - name: contourcert
             mountPath: /certs
             readOnly: true
-          - name: cacert
-            mountPath: /ca
-            readOnly: true
           - name: contour-config
             mountPath: /config
             readOnly: true
         env:
+        - name: CONTOUR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
         - name: POD_NAME
           valueFrom:
             fieldRef:
@@ -91,9 +92,6 @@ spec:
         - name: contourcert
           secret:
             secretName: contourcert
-        - name: cacert
-          secret:
-            secretName: cacert
         - name: contour-config
           configMap:
             name: contour
@@ -103,6 +101,7 @@ spec:
               path: contour.yaml
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
