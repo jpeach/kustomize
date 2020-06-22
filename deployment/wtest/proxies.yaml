@@ -1,0 +1,53 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: one
+spec:
+  virtualhost:
+    fqdn: one.wtest.jpeach.org
+    tls:
+      secretName: wtest-wildcard
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: httpbin
+          port: 80
+
+---
+
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: two
+spec:
+  virtualhost:
+    fqdn: two.wtest.jpeach.org
+    tls:
+      secretName: wtest-wildcard
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: httpbin
+          port: 80
+
+
+---
+
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: three
+spec:
+  virtualhost:
+    fqdn: three.wtest.jpeach.org
+    tls:
+      secretName: wtest-wildcard
+  routes:
+    - conditions:
+      - prefix: /
+      services:
+        - name: httpbin
+          port: 80
+

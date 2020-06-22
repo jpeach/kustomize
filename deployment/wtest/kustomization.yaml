@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+- https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.yaml
+- ../../contour/configurations/gke
+
+resources:
+- httpbin.yaml
+- proxies.yaml
+
+# Run `make certificates && make links` beforehand.
+secretGenerator:
+- name: wtest-wildcard
+  type: kubernetes.io/tls
+  files:
+  - tls.crt
+  - tls.key
+  - ca.crt
+
+# kustomize doesn't know how to update HTTPProxies that use secrets,
+# so disable the generator.
+generatorOptions:
+  disableNameSuffixHash: true
+
+
