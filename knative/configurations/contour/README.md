@@ -11,7 +11,7 @@ controller that implements the "contour.ingress.networking.knative.dev"
 Ingress class.
 
 There are two separate Contour deployments in the "projectcontour-internal"
-and "projectcontour-internal" namespaces. Since each deployment
+and "projectcontour-external" namespaces. Since each deployment
 needs a separate pool of Envoy proxies (which are deployed as a
 DaemonSet), each DaemonSet restricts itself to labeled nodes. As a
 separate manual step, you need to apply the
